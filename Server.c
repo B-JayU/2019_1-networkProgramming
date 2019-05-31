@@ -18,7 +18,7 @@ typedef struct node {
 }node;
 
 typedef struct {
-	int clientId;
+	SOCKET clientId;
 	int seatCount;
 	nodePointer seat;
 }clientInfo;
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 	char buf[A_SIZE];
 	int recent, msg1_len, msg2_len;
 	char message1[] = "좌석을 예약하려면 'R', 종료하려면 'Q' : ";
-	char message2[] = "좌석을 예약하려면 'R', 교횐하려면 'E', 종료하려면 'Q' : ";
+	char message2[] = "좌석을 예약하려면 'R', 교환하려면 'E', 종료하려면 'Q' : ";
 
 	for (i = 0; i < maxClient; i++) {
 		client[i].seat = NULL;
@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
 					FD_SET(hClntSock, &reads);
 					printf("connected client: %d \n", hClntSock);
 					send(hClntSock, arrLONG, 32, 0);
-					client[i].clientId = i + 1;
+					client[i].clientId = reads.fd_array[i];
 					//	client[i].
 				}
 				else    // read message!
@@ -185,6 +185,54 @@ int main(int argc, char *argv[])
 							}
 						}
 						else if (buf[0] == 'E') {
+							
+							if (strLen == 1) {
+								//	printf("%s\n",buf);
+								send(reads.fd_array[i], buf, strLen, 0);
+							}
+
+							else {
+								
+								r = buf[1] - '1', c = buf[3] - '1';
+								//loc = r*col + c;
+
+								int rr, cc;
+								SOCKET which;
+								rr = buf[4] - '1', cc = buf[6] - '1';
+
+								for (int i = 0; i < maxClient; i++) {
+									for (clientInfo *search = client[i].seat; search != NULL; search = search->seat->next) {
+										if (search->seat->row_s == rr && search->seat->col_s == cc) {
+											which = client[i].clientId;
+											break;
+										}
+										if (which != 0)
+											break;
+									}
+								}
+
+								char message_e[100];
+								sprintf(message_e, "%d%d,%c를 %d,%c로 변경요청을 수락하시겠습니까?", i, rr, cc + 'a' - 1, r, c + 'a' - 1);
+								send(which, message_e, 47, 0);
+
+
+								if (arrLONG[loc] == '0') {
+
+									//client[i].seatCount++;
+									arrLONG[loc] = '1';
+									send(reads.fd_array[i], "O확정? : ", 10, 0);
+								}
+								else {
+									char a[34];
+									a[0] = 'X';
+									a[1] = 0;
+									strcat(a, arrLONG);
+									send(reads.fd_array[i], a, 34, 0);
+
+									//client[i].seatCount--;
+									continue;
+								}
+							}
 
 						}
 						else if (buf[0] == 'O') {
@@ -217,7 +265,40 @@ int main(int argc, char *argv[])
 							send(reads.fd_array[i], arrLONG, A_SIZE, 0);
 							continue;
 						}
+						else if (buf[0] == 'Y') {
+							int request_client = buf[1]-'0';
+						
+							nodePointer search;
+							for (search = client[request_client].seat;search ; search = search->next) {
+								if (search->row_s == buf[2]-'0' && search->col_s == buf[4]-'0')
+									break;
+							}
+
+							nodePointer search2;
+							for (search2 = client[i].seat; ; search2 = search2->next) {
+								if (search2->row_s == buf[5]-'0' && search2->col_s == buf[7]-'0')
+									break;
+							}
+
+							int r_temp, c_temp;
+							r_temp = search->row_s;
+							search->row_s = search2->row_s;
+							search2->row_s = r_temp;
+
+							c_temp = search->col_s;
+							search->col_s = search2->col_s;
+							search2->col_s = c_temp;
+
+							char m[100];
+							scanf_s(m, "Y%s", arrLONG);
+							send(client[request_client].clientId, m, 33, 0);
+
+						}
+						else if (buf[0] == 'N') {
+							
+						}
 						else {
+							continue;
 							printf("ERROR\n");
 						}
 						memset(buf, 0, sizeof(buf));
