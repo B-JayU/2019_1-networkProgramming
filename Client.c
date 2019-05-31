@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 	WSADATA wsaData;
 	SOCKET hSock;
 	SOCKADDR_IN servAdr;
-	int strLen, i, isSeat, isClose, row, count;
+	int strLen, i, isSeat, isClose, row, count, select;
 	char msg[BUF_SIZE];
 	char signal[] = "aaaaaaaaaaaaaaaaaaa";
 	char buf, col, set;
@@ -254,15 +254,61 @@ int main(int argc, char *argv[]) {
 					}
 					printf("예약한 좌석 중 교환할 좌석의 번호를 입력하세요 : ");
 					
-					// 내 좌석 출력
+					scanf("%d%c", &select, &buf);
 
-					// 내 좌석 선택안내 출력
-					// 내 좌석 입력
+					printf("교환할 좌석을 입력해주세요( 예. 2,a ) : ");
+					scanf("%d%c%c", &row, &buf, &col);
+					scanf("%c", &buf);
 
-					// 교환할 좌석 선택안내 출력
-					// 교환할 좌석 입력
+					temp = mySeat;
+					for (i = 0; i < select - 1; i++) {
+						temp = temp->next;
+					}
+					sprintf(msg, "E%d,%d%d,%d", temp->row, temp->col - 'a' + 1, row, col - 'a' + 1);
 
-					// 서버에게 전송
+					send(hSock, msg, 7, 0);
+
+					strLen = recv(hSock, msg, BUF_SIZE, 0);
+
+					if (msg[0] == 'y' || msg[0] == 'Y') {
+						printf("교환 완료!\n");
+						temp->row = row;
+						temp->col = col;
+					}
+					else {
+						printf("교환이 거부되었습니다.\n");
+					}
+
+					printSeat(msg, 1);
+				}
+				else if (msg[0] == 'h' || msg[0] == 'H') {
+					while (1) {
+						strLen = recv(hSock, msg, BUF_SIZE, 0);
+
+						printf("%c,%c를 %c,%c로 변경 요청이 있습니다. 수락하시겠습니까?(Y/N) : ", msg[4], msg[6] - '1' + 'a', msg[1], msg[3] - '1' + 'a');
+
+						scanf("%c%c", &set, &buf);
+
+						for (i = 0; i < 7; i++) {
+							msg[i + 1] = msg[i];
+						}
+						if (set == 'y' || set == 'Y')
+							msg[0] = 'Y';
+						if (set == 'n' || set == 'N')
+							msg[0] = 'N';
+
+						if (msg[0] == 'Y') {
+							for (temp = mySeat; temp; temp = temp->next) {
+								if (temp->row == msg[4] - '0' && temp->col == msg[6] - '1' + 'a') {
+									break;
+								}
+							}
+							temp->row = msg[1] - '0';
+							temp->col = msg[3] - '1' + 'a';
+						}
+
+						send(hSock, msg, 8, 0);
+					}
 				}
 				else if (msg[0] == 'q' || msg[0] == 'Q') {
 					msg[0] = 'Q';
