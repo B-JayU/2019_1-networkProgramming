@@ -192,46 +192,34 @@ int main(int argc, char *argv[])
 							}
 
 							else {
-								
+								printf("1\n");
 								r = buf[1] - '1', c = buf[3] - '1';
 								//loc = r*col + c;
 
 								int rr, cc;
-								SOCKET which;
+								SOCKET which = NULL;
 								rr = buf[4] - '1', cc = buf[6] - '1';
-
-								for (int i = 0; i < maxClient; i++) {
-									for (clientInfo *search = client[i].seat; search != NULL; search = search->seat->next) {
-										if (search->seat->row_s == rr && search->seat->col_s == cc) {
-											which = client[i].clientId;
+								int ii;
+								for (ii = 0; ii < maxClient; ii++) {
+									for (nodePointer search = client[ii].seat; search != NULL; search = search->next) {
+										if (search->row_s == rr && search->col_s == cc) {
+											which = client[ii].clientId;
 											break;
 										}
-										if (which != 0)
-											break;
 									}
+									if (which)
+										break;
 								}
+
+								printf("%d\n", which);
+
+								printf("2\n");
 
 								char message_e[100];
-								sprintf(message_e, "%d%d,%c를 %d,%c로 변경요청을 수락하시겠습니까?", i, rr, cc + 'a' - 1, r, c + 'a' - 1);
-								send(which, message_e, 47, 0);
+								buf[0] = i + '0';
+								send(which, buf, 7, 0);
 
-
-								if (arrLONG[loc] == '0') {
-
-									//client[i].seatCount++;
-									arrLONG[loc] = '1';
-									send(reads.fd_array[i], "O확정? : ", 10, 0);
-								}
-								else {
-									char a[34];
-									a[0] = 'X';
-									a[1] = 0;
-									strcat(a, arrLONG);
-									send(reads.fd_array[i], a, 34, 0);
-
-									//client[i].seatCount--;
-									continue;
-								}
+								printf("3\n");
 							}
 
 						}
