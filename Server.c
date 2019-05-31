@@ -55,9 +55,9 @@ int main(int argc, char *argv[])
 	char buf[A_SIZE];
 	int recent, msg1_len, msg2_len;
 	char message1[] = "좌석을 예약하려면 'R', 종료하려면 'Q' : ";
-	char message2[] = "좌석을 예약하려면 'R', 예약하려면 'E', 종료하려면 'Q' : ";
+	char message2[] = "좌석을 예약하려면 'R', 교횐하려면 'E', 종료하려면 'Q' : ";
 
-	for (i = 0; i < maxClient; i++){
+	for (i = 0; i < maxClient; i++) {
 		client[i].seat = NULL;
 		client[i].seatCount = 0;
 	}
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 		ErrorHandling("listen() error");
 
 	FD_ZERO(&reads);//select 함수의 관찰 대상이 되는 디스크립터들을 0으로 초기화
-	//hServSock은 리스닝 소켓이므로 연결요청이 오는지 확인하기 위해
+					//hServSock은 리스닝 소켓이므로 연결요청이 오는지 확인하기 위해
 	FD_SET(hServSock, &reads);//hServSock을 관찰대상으로 등록
 
 	while (1)
@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
 					printf("connected client: %d \n", hClntSock);
 					send(hClntSock, arrLONG, 32, 0);
 					client[i].clientId = i + 1;
-				//	client[i].
+					//	client[i].
 				}
 				else    // read message!
 				{
@@ -136,17 +136,17 @@ int main(int argc, char *argv[])
 					else
 					{
 						if (strLen == 20) {
-							
-							
-							if (client[i].seatCount == 0){
+
+
+							if (client[i].seatCount == 0) {
 								send(reads.fd_array[i], message1, msg1_len, 0);
 							}
-							else{
+							else {
 								send(reads.fd_array[i], message2, msg2_len, 0);
 							}
 							//nodePointer temp = (nodePointer)malloc(sizeof(nodePointer));
 							//node* temp = malloc(sizeof(node));
-							
+
 							//client[i].seat = temp;
 
 							/*
@@ -156,10 +156,10 @@ int main(int argc, char *argv[])
 						}
 						else if (buf[0] == 'R') {
 
-							if (strLen == 1){
-							//	printf("%s\n",buf);
+							if (strLen == 1) {
+								//	printf("%s\n",buf);
 								send(reads.fd_array[i], buf, strLen, 0);
-								
+
 							}
 
 							else {
@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
 							send(reads.fd_array[i], arrLONG, A_SIZE, 0);
 						}
 						else if (buf[0] == 'X') {
-							
+
 							r = buf[1] - '1', c = buf[3] - '1';
 							loc = r*col + c;
 							arrLONG[loc] = '0';
