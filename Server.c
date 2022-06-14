@@ -8,7 +8,7 @@
 #define A_SIZE 32
 #define row 8
 #define col 4
-#define maxClient 5
+#define maxClient 6
 
 typedef struct node *nodePointer;
 typedef struct node {
@@ -34,12 +34,12 @@ int main(int argc, char *argv[])
 
 
 	/*   node* temp = malloc(sizeof(node));
-	temp->cID = client 번호;
+	temp->cID = client ��ȣ;
 	temp->row = row;
 	temp->column = column;
 
-	if (client[client 번호] == NULL)
-	client[client 번호] = temp;
+	if (client[client ��ȣ] == NULL)
+	client[client ��ȣ] = temp;
 	*/
 
 	WSADATA wsaData;
@@ -54,8 +54,8 @@ int main(int argc, char *argv[])
 	int strLen, fdNum, i;
 	char buf[A_SIZE];
 	int recent, msg1_len, msg2_len;
-	char message1[] = "좌석을 예약하려면 'R', 종료하려면 'Q' : ";
-	char message2[] = "좌석을 예약하려면 'R', 교환하려면 'E', 종료하려면 'Q' : ";
+	char message1[] = "�¼��� �����Ϸ��� 'R', �����Ϸ��� 'Q' : ";
+	char message2[] = "�¼��� �����Ϸ��� 'R', ��ȯ�Ϸ��� 'E', �� �¼� ���� : 'S', �����Ϸ��� 'Q' : ";
 
 	for (i = 0; i < maxClient; i++) {
 		client[i].seat = NULL;
@@ -82,29 +82,29 @@ int main(int argc, char *argv[])
 	if (listen(hServSock, 5) == SOCKET_ERROR)
 		ErrorHandling("listen() error");
 
-	FD_ZERO(&reads);//select 함수의 관찰 대상이 되는 디스크립터들을 0으로 초기화
-					//hServSock은 리스닝 소켓이므로 연결요청이 오는지 확인하기 위해
-	FD_SET(hServSock, &reads);//hServSock을 관찰대상으로 등록
+	FD_ZERO(&reads);//select �Լ��� ���� ����� �Ǵ� ��ũ���͵��� 0���� �ʱ�ȭ
+	//hServSock�� ������ �����̹Ƿ� �����û�� ������ Ȯ���ϱ� ����
+	FD_SET(hServSock, &reads);//hServSock�� ����������� ���
 
 	while (1)
 	{
-		//select 함수의 호출이 끝나면 변화가 발생한 디스크립터를 제외한 나머지는 0으로
-		//따라서 디스크립터 정보들을 복사
+		//select �Լ��� ȣ���� ������ ��ȭ�� �߻��� ��ũ���͸� ������ �������� 0����
+		//���� ��ũ���� �������� ����
 		cpyReads = reads;
 		timeout.tv_sec = 5;
 		timeout.tv_usec = 5000;
 
-		//select함수 error 처리
-		//윈도우에서는 관찰대상이 
-		if ((fdNum = select(0, &cpyReads, 0, 0, &timeout)) == SOCKET_ERROR)
+		//select�Լ� error ó��
+		//�����쿡���� ��������� 
+		if ((fdNum = select(0, &cpyReads, 0, 0, 0)) == SOCKET_ERROR)
 			break;
-		//readset 즉 어떤 디스크립터(배열 내에)에도 변화가 없음을 의미
-		//따라서 타임아웃 재설정하고 재호출하기 위해 continue 
+		//readset �� � ��ũ����(�迭 ����)���� ��ȭ�� ������ �ǹ�
+		//���� Ÿ�Ӿƿ� �缳���ϰ� ��ȣ���ϱ� ���� continue
 		if (fdNum == 0)
 			continue;
-		//파일 스크립터 내에 상태가 변경되었을 경우
-		//(연결 요청 또는 데이터 수신)
-		for (i = 0; i<reads.fd_count; i++)
+		//���� ��ũ���� ���� ���°� ����Ǿ��� ���
+		//(���� ��û �Ǵ� ������ ����)
+		for (i = 0; i < reads.fd_count; i++)
 		{
 			if (FD_ISSET(reads.fd_array[i], &cpyReads))
 			{
@@ -114,10 +114,11 @@ int main(int argc, char *argv[])
 					hClntSock =
 						accept(hServSock, (SOCKADDR*)&clntAdr, &adrSz);
 					FD_SET(hClntSock, &reads);
+
 					printf("connected client: %d \n", hClntSock);
 					send(hClntSock, arrLONG, 32, 0);
-					client[i].clientId = reads.fd_array[i];
-					//	client[i].
+					client[reads.fd_count - 1].clientId = hClntSock;
+					//   client[i].
 				}
 				else    // read message!
 				{
@@ -157,20 +158,19 @@ int main(int argc, char *argv[])
 						else if (buf[0] == 'R') {
 
 							if (strLen == 1) {
-								//	printf("%s\n",buf);
 								send(reads.fd_array[i], buf, strLen, 0);
 
 							}
 
 							else {
 								r = buf[1] - '1', c = buf[3] - '1';
-								loc = r*col + c;
+								loc = r * col + c;
 
 								if (arrLONG[loc] == '0') {
 
 									//client[i].seatCount++;
 									arrLONG[loc] = '1';
-									send(reads.fd_array[i], "O확정? : ", 10, 0);
+									send(reads.fd_array[i], "OȮ��? : ", 10, 0);
 								}
 								else {
 									char a[34];
@@ -185,14 +185,13 @@ int main(int argc, char *argv[])
 							}
 						}
 						else if (buf[0] == 'E') {
-							
+
 							if (strLen == 1) {
-								//	printf("%s\n",buf);
+								//   printf("%s\n",buf);
 								send(reads.fd_array[i], buf, strLen, 0);
 							}
 
 							else {
-								printf("1\n");
 								r = buf[1] - '1', c = buf[3] - '1';
 								//loc = r*col + c;
 
@@ -201,7 +200,7 @@ int main(int argc, char *argv[])
 								rr = buf[4] - '1', cc = buf[6] - '1';
 								int ii;
 								for (ii = 0; ii < maxClient; ii++) {
-									for (nodePointer search = client[ii].seat; search != NULL; search = search->next) {
+									for (nodePointer search = client[ii].seat; search; search = search->next) {
 										if (search->row_s == rr && search->col_s == cc) {
 											which = client[ii].clientId;
 											break;
@@ -211,23 +210,23 @@ int main(int argc, char *argv[])
 										break;
 								}
 
-								printf("%d\n", which);
 
-								printf("2\n");
+							//	printf("%d\n", which);
+
+
 
 								char message_e[100];
 								buf[0] = i + '0';
 								send(which, buf, 7, 0);
 
-								printf("3\n");
 							}
 
 						}
 						else if (buf[0] == 'O') {
 
 							r = buf[1] - '1', c = buf[3] - '1';
-							loc = r*col + c;
-							printf("buf가 O일 경우 : %d ", loc);
+							loc = r * col + c;
+						//	printf("buf�� O�� ��� : %d ", loc);
 
 							nodePointer temp = (nodePointer)malloc(sizeof(nodePointer));
 							temp->row_s = r;
@@ -247,24 +246,24 @@ int main(int argc, char *argv[])
 						else if (buf[0] == 'X') {
 
 							r = buf[1] - '1', c = buf[3] - '1';
-							loc = r*col + c;
+							loc = r * col + c;
 							arrLONG[loc] = '0';
 							//printf("loc : %d\n", loc);
 							send(reads.fd_array[i], arrLONG, A_SIZE, 0);
 							continue;
 						}
 						else if (buf[0] == 'Y') {
-							int request_client = buf[1]-'0';
-						
+							int request_client = buf[1] - '0';
+
 							nodePointer search;
-							for (search = client[request_client].seat;search ; search = search->next) {
-								if (search->row_s == buf[2]-'0' && search->col_s == buf[4]-'0')
+							for (search = client[request_client].seat; search; search = search->next) {
+								if (search->row_s == buf[2] - '1' && search->col_s == buf[4] - '1')
 									break;
 							}
 
 							nodePointer search2;
-							for (search2 = client[i].seat; ; search2 = search2->next) {
-								if (search2->row_s == buf[5]-'0' && search2->col_s == buf[7]-'0')
+							for (search2 = client[i].seat; search2; search2 = search2->next) {
+								if (search2->row_s == buf[5] - '1' && search2->col_s == buf[7] - '1')
 									break;
 							}
 
@@ -278,12 +277,18 @@ int main(int argc, char *argv[])
 							search2->col_s = c_temp;
 
 							char m[100];
-							scanf_s(m, "Y%s", arrLONG);
+							sprintf(m, "Y%s", arrLONG);
 							send(client[request_client].clientId, m, 33, 0);
-
+							send(reads.fd_array[i], arrLONG, A_SIZE, 0);
 						}
 						else if (buf[0] == 'N') {
-							
+							char m[100];
+							int request_client = buf[1] - '0';
+							sprintf(m, "N%s", arrLONG);
+							send(client[request_client].clientId, m, 33, 0);
+						}
+						else if (buf[0] == 'S') {
+							send(reads.fd_array[i], arrLONG, A_SIZE, 0);
 						}
 						else {
 							continue;

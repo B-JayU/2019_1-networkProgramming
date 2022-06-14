@@ -63,7 +63,6 @@ int main(int argc, char *argv[]) {
 		if (!isSeat) {
 			strLen = recv(hSock, msg, BUF_SIZE - 1, 0);
 			msg[strLen] = 0;
-
 			fputs(msg, stdout);
 
 			while (1) {
@@ -83,7 +82,7 @@ int main(int argc, char *argv[]) {
 						exit(1);
 					}
 
-					printf("예약할 좌석을 선택하세요( 예. 2,a ) : ");
+					printf("������ �¼��� �����ϼ���( ��. 2,a ) : ");
 
 					scanf("%d%c%c", &row, &buf, &col);
 					scanf("%c", &buf);
@@ -109,7 +108,7 @@ int main(int argc, char *argv[]) {
 							send(hSock, msg, strLen, 0);
 
 							isSeat++;
-							if (mySeat)
+							if (!mySeat)
 								mySeat = makeNewNode(row, col);
 							else {
 								temp = makeNewNode(row, col);
@@ -128,7 +127,7 @@ int main(int argc, char *argv[]) {
 							printSeat(msg, 0);
 					}
 					else { // msg[0] == 'X'
-						printf("\n이미 예약된 자리입니다.\n");
+						printf("\n�̹� ����� �ڸ��Դϴ�.\n");
 
 						printSeat(msg, 1);
 
@@ -153,7 +152,7 @@ int main(int argc, char *argv[]) {
 					break;
 				}
 
-				printf("잘못된 입력이오니 다시 입력해주세요 : ");
+				printf("�߸��� �Է��̿��� �ٽ� �Է����ּ��� : ");
 				scanf("%c", &buf);
 			}
 		}
@@ -176,11 +175,11 @@ int main(int argc, char *argv[]) {
 					strLen = recv(hSock, msg, BUF_SIZE, 0);
 
 					if (msg[0] != 'R') {
-						fprintf(stderr, "예외 처리 필요!");
+						fprintf(stderr, "���� ó�� �ʿ�!");
 						exit(1);
 					}
 
-					printf("예약할 좌석을 선택하세요( 예. 2,a ) : ");
+					printf("������ �¼��� �����ϼ���( ��. 2,a ) : ");
 
 					scanf("%d%c%c", &row, &buf, &col);
 					scanf("%c", &buf);
@@ -206,7 +205,7 @@ int main(int argc, char *argv[]) {
 							send(hSock, msg, strLen, 0);
 
 							isSeat++;
-							if (mySeat)
+							if (!mySeat)
 								mySeat = makeNewNode(row, col);
 							else {
 								temp = makeNewNode(row, col);
@@ -225,7 +224,7 @@ int main(int argc, char *argv[]) {
 						printSeat(msg, 0);
 					}
 					else { // msg[0] == 'X'
-						printf("\n이미 예약된 자리입니다.\n");
+						printf("\n�̹� ����� �ڸ��Դϴ�.\n");
 
 						printSeat(msg, 1);
 
@@ -244,7 +243,7 @@ int main(int argc, char *argv[]) {
 					strLen = recv(hSock, msg, BUF_SIZE, 0);
 
 					if (msg[0] != 'E') {
-						fprintf(stderr, "예외 처리 필요!");
+						fprintf(stderr, "���� ó�� �ʿ�!");
 						exit(1);
 					}
 
@@ -252,11 +251,11 @@ int main(int argc, char *argv[]) {
 					for (temp = mySeat; temp; temp = temp->next) {
 						printf("%d) %d,%c\n", count++, temp->row, temp->col);
 					}
-					printf("예약한 좌석 중 교환할 좌석의 번호를 입력하세요 : \n");
-
+					printf("������ �¼� �� ��ȯ�� �¼��� ��ȣ�� �Է��ϼ��� : ");
+					
 					scanf("%d%c", &select, &buf);
 
-					printf("교환할 좌석을 입력해주세요( 예. 2,a ) : ");
+					printf("��ȯ�� �¼��� �Է����ּ���( ��. 2,a ) : ");
 					scanf("%d%c%c", &row, &buf, &col);
 					scanf("%c", &buf);
 
@@ -271,44 +270,65 @@ int main(int argc, char *argv[]) {
 					strLen = recv(hSock, msg, BUF_SIZE, 0);
 
 					if (msg[0] == 'y' || msg[0] == 'Y') {
-						printf("교환 완료!\n");
+						printf("��ȯ �Ϸ�!\n");
 						temp->row = row;
 						temp->col = col;
 					}
-					else {
-						printf("교환이 거부되었습니다.\n");
+					else if (msg[0] == 'n' || msg[0] == 'N') {
+						printf("��ȯ�� �źεǾ����ϴ�.\n");
 					}
 
 					printSeat(msg, 1);
+
+					break;
 				}
 				else if (msg[0] == 'h' || msg[0] == 'H') {
-					while (1) {
-						strLen = recv(hSock, msg, BUF_SIZE, 0);
+					strLen = recv(hSock, msg, BUF_SIZE, 0);
 
-						printf("%c,%c를 %c,%c로 변경 요청이 있습니다. 수락하시겠습니까?(Y/N) : ", msg[4], msg[6] - '1' + 'a', msg[1], msg[3] - '1' + 'a');
+					printf("%c,%c�� %c,%c�� ���� ��û�� �ֽ��ϴ�. �����Ͻðڽ��ϱ�?(Y/N) : ", msg[4], msg[6] - '1' + 'a', msg[1], msg[3] - '1' + 'a');
 
-						scanf("%c%c", &set, &buf);
+					scanf("%c%c", &set, &buf);
 
-						for (i = 0; i < 7; i++) {
-							msg[i + 1] = msg[i];
-						}
-						if (set == 'y' || set == 'Y')
-							msg[0] = 'Y';
-						if (set == 'n' || set == 'N')
-							msg[0] = 'N';
-
-						if (msg[0] == 'Y') {
-							for (temp = mySeat; temp; temp = temp->next) {
-								if (temp->row == msg[4] - '0' && temp->col == msg[6] - '1' + 'a') {
-									break;
-								}
-							}
-							temp->row = msg[1] - '0';
-							temp->col = msg[3] - '1' + 'a';
-						}
-
-						send(hSock, msg, 8, 0);
+					for (i = 6; i >= 0; i--) {
+						msg[i + 1] = msg[i];
 					}
+					if (set == 'y' || set == 'Y')
+						msg[0] = 'Y';
+					if (set == 'n' || set == 'N')
+						msg[0] = 'N';
+
+					if (msg[0] == 'Y') {
+						for (temp = mySeat; temp; temp = temp->next) {
+							if (temp->row == msg[5] - '0' && temp->col == msg[7] - '1' + 'a') {
+								break;
+							}
+						}
+						temp->row = msg[2] - '0';
+						temp->col = msg[4] - '1' + 'a';
+					}
+
+					send(hSock, msg, 8, 0);
+
+					strLen = recv(hSock, msg, BUF_SIZE, 0);
+					printSeat(msg, 0);
+
+					break;
+				}
+				else if (msg[0] == 's' || msg[0] == 'S') {
+					msg[0] = 'S';
+
+					count = 1;
+					printf("���� �����ϰ� �ִ� �¼� :\n");
+					for (temp = mySeat; temp; temp = temp->next) {
+						printf("%d) %d,%c\n", count++, temp->row, temp->col);
+					}
+					
+					send(hSock, msg, 1, 0);
+
+					strLen = recv(hSock, msg, BUF_SIZE, 0);
+					printSeat(msg, 0);
+
+					break;
 				}
 				else if (msg[0] == 'q' || msg[0] == 'Q') {
 					msg[0] = 'Q';
@@ -326,7 +346,7 @@ int main(int argc, char *argv[]) {
 					break;
 				}
 
-				printf("잘못된 입력이오니 다시 입력해주세요 : ");
+				printf("�߸��� �Է��̿��� �ٽ� �Է����ּ��� : ");
 				scanf("%c", &buf);
 			}
 		}
@@ -343,31 +363,30 @@ int main(int argc, char *argv[]) {
 void printSeat(char *msg, int start) {
 	int i, j;
 
-	printf(" A B  C D \n");
+	printf("\n A B  C D \n");
 	for (i = 0; i < 8; i++) {
 		printf("%d", i + 1);
 		for (j = 0; j < 2; j++) {
 			if (msg[i * 4 + j + start] == '0')
-				printf("□");
+				printf("��");
 			else
-				printf("■");
+				printf("��");
 		}
 		printf(" ");
 		for (j = 2; j < 4; j++) {
 			if (msg[i * 4 + j + start] == '0')
-				printf("□");
+				printf("��");
 			else
-				printf("■");
+				printf("��");
 		}
 		printf("\n");
 	}
-	printf("\n");
 }
 
 nodePointer makeNewNode(int row, char col) {
 	nodePointer temp;
 
-	temp = (nodePointer)malloc(sizeof(nodePointer));
+	temp = (nodePointer)malloc(sizeof(*temp));
 	temp->row = row;
 	temp->col = col;
 	temp->next = NULL;
