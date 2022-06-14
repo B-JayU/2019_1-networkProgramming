@@ -63,7 +63,6 @@ int main(int argc, char *argv[]) {
 		if (!isSeat) {
 			strLen = recv(hSock, msg, BUF_SIZE - 1, 0);
 			msg[strLen] = 0;
-
 			fputs(msg, stdout);
 
 			while (1) {
@@ -79,11 +78,11 @@ int main(int argc, char *argv[]) {
 					strLen = recv(hSock, msg, BUF_SIZE, 0);
 
 					if (msg[0] != 'R'){
-						fprintf(stderr, "ì˜ˆì™¸ ì²˜ë¦¬ í•„ìš”!");
+						fprintf(stderr, "¿¹¿Ü Ã³¸® ÇÊ¿ä!");
 						exit(1);
 					}
 
-					printf("ì˜ˆì•½í•  ì¢Œì„ì„ ì„ íƒí•˜ì„¸ìš”( ì˜ˆ. 2,a ) : ");
+					printf("¿¹¾àÇÒ ÁÂ¼®À» ¼±ÅÃÇÏ¼¼¿ä( ¿¹. 2,a ) : ");
 
 					scanf("%d%c%c", &row, &buf, &col);
 					scanf("%c", &buf);
@@ -109,7 +108,7 @@ int main(int argc, char *argv[]) {
 							send(hSock, msg, strLen, 0);
 
 							isSeat++;
-							if (mySeat)
+							if (!mySeat)
 								mySeat = makeNewNode(row, col);
 							else {
 								temp = makeNewNode(row, col);
@@ -128,7 +127,7 @@ int main(int argc, char *argv[]) {
 						printSeat(msg, 0);
 					}
 					else { // msg[0] == 'X'
-						printf("\nì´ë¯¸ ì˜ˆì•½ëœ ìë¦¬ì…ë‹ˆë‹¤.\n");
+						printf("\nÀÌ¹Ì ¿¹¾àµÈ ÀÚ¸®ÀÔ´Ï´Ù.\n");
 
 						printSeat(msg, 1);
 
@@ -153,7 +152,7 @@ int main(int argc, char *argv[]) {
 					break;
 				}
 
-				printf("ì˜ëª»ëœ ì…ë ¥ì´ì˜¤ë‹ˆ ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš” : ");
+				printf("Àß¸øµÈ ÀÔ·ÂÀÌ¿À´Ï ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä : ");
 				scanf("%c", &buf);
 			}
 		}
@@ -176,11 +175,11 @@ int main(int argc, char *argv[]) {
 					strLen = recv(hSock, msg, BUF_SIZE, 0);
 
 					if (msg[0] != 'R') {
-						fprintf(stderr, "ì˜ˆì™¸ ì²˜ë¦¬ í•„ìš”!");
+						fprintf(stderr, "¿¹¿Ü Ã³¸® ÇÊ¿ä!");
 						exit(1);
 					}
 
-					printf("ì˜ˆì•½í•  ì¢Œì„ì„ ì„ íƒí•˜ì„¸ìš”( ì˜ˆ. 2,a ) : ");
+					printf("¿¹¾àÇÒ ÁÂ¼®À» ¼±ÅÃÇÏ¼¼¿ä( ¿¹. 2,a ) : ");
 
 					scanf("%d%c%c", &row, &buf, &col);
 					scanf("%c", &buf);
@@ -206,7 +205,7 @@ int main(int argc, char *argv[]) {
 							send(hSock, msg, strLen, 0);
 
 							isSeat++;
-							if (mySeat)
+							if (!mySeat)
 								mySeat = makeNewNode(row, col);
 							else {
 								temp = makeNewNode(row, col);
@@ -225,7 +224,7 @@ int main(int argc, char *argv[]) {
 						printSeat(msg, 0);
 					}
 					else { // msg[0] == 'X'
-						printf("\nì´ë¯¸ ì˜ˆì•½ëœ ìë¦¬ì…ë‹ˆë‹¤.\n");
+						printf("\nÀÌ¹Ì ¿¹¾àµÈ ÀÚ¸®ÀÔ´Ï´Ù.\n");
 
 						printSeat(msg, 1);
 
@@ -244,7 +243,7 @@ int main(int argc, char *argv[]) {
 					strLen = recv(hSock, msg, BUF_SIZE, 0);
 
 					if (msg[0] != 'E') {
-						fprintf(stderr, "ì˜ˆì™¸ ì²˜ë¦¬ í•„ìš”!");
+						fprintf(stderr, "¿¹¿Ü Ã³¸® ÇÊ¿ä!");
 						exit(1);
 					}
 
@@ -252,11 +251,11 @@ int main(int argc, char *argv[]) {
 					for (temp = mySeat; temp; temp = temp->next) {
 						printf("%d) %d,%c\n", count++, temp->row, temp->col);
 					}
-					printf("ì˜ˆì•½í•œ ì¢Œì„ ì¤‘ êµí™˜í•  ì¢Œì„ì˜ ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ì„¸ìš” : ");
+					printf("¿¹¾àÇÑ ÁÂ¼® Áß ±³È¯ÇÒ ÁÂ¼®ÀÇ ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä : ");
 					
 					scanf("%d%c", &select, &buf);
 
-					printf("êµí™˜í•  ì¢Œì„ì„ ì…ë ¥í•´ì£¼ì„¸ìš”( ì˜ˆ. 2,a ) : ");
+					printf("±³È¯ÇÒ ÁÂ¼®À» ÀÔ·ÂÇØÁÖ¼¼¿ä( ¿¹. 2,a ) : ");
 					scanf("%d%c%c", &row, &buf, &col);
 					scanf("%c", &buf);
 
@@ -271,44 +270,65 @@ int main(int argc, char *argv[]) {
 					strLen = recv(hSock, msg, BUF_SIZE, 0);
 
 					if (msg[0] == 'y' || msg[0] == 'Y') {
-						printf("êµí™˜ ì™„ë£Œ!\n");
+						printf("±³È¯ ¿Ï·á!\n");
 						temp->row = row;
 						temp->col = col;
 					}
-					else {
-						printf("êµí™˜ì´ ê±°ë¶€ë˜ì—ˆìŠµë‹ˆë‹¤.\n");
+					else if (msg[0] == 'n' || msg[0] == 'N') {
+						printf("±³È¯ÀÌ °ÅºÎµÇ¾ú½À´Ï´Ù.\n");
 					}
 
 					printSeat(msg, 1);
+
+					break;
 				}
 				else if (msg[0] == 'h' || msg[0] == 'H') {
-					while (1) {
-						strLen = recv(hSock, msg, BUF_SIZE, 0);
+					strLen = recv(hSock, msg, BUF_SIZE, 0);
 
-						printf("%c,%cë¥¼ %c,%cë¡œ ë³€ê²½ ìš”ì²­ì´ ìˆìŠµë‹ˆë‹¤. ìˆ˜ë½í•˜ì‹œê² ìŠµë‹ˆê¹Œ?(Y/N) : ", msg[4], msg[6] - '1' + 'a', msg[1], msg[3] - '1' + 'a');
+					printf("%c,%c¸¦ %c,%c·Î º¯°æ ¿äÃ»ÀÌ ÀÖ½À´Ï´Ù. ¼ö¶ôÇÏ½Ã°Ú½À´Ï±î?(Y/N) : ", msg[4], msg[6] - '1' + 'a', msg[1], msg[3] - '1' + 'a');
 
-						scanf("%c%c", &set, &buf);
+					scanf("%c%c", &set, &buf);
 
-						for (i = 0; i < 7; i++) {
-							msg[i + 1] = msg[i];
-						}
-						if (set == 'y' || set == 'Y')
-							msg[0] = 'Y';
-						if (set == 'n' || set == 'N')
-							msg[0] = 'N';
-
-						if (msg[0] == 'Y') {
-							for (temp = mySeat; temp; temp = temp->next) {
-								if (temp->row == msg[4] - '0' && temp->col == msg[6] - '1' + 'a') {
-									break;
-								}
-							}
-							temp->row = msg[1] - '0';
-							temp->col = msg[3] - '1' + 'a';
-						}
-
-						send(hSock, msg, 8, 0);
+					for (i = 6; i >= 0; i--) {
+						msg[i + 1] = msg[i];
 					}
+					if (set == 'y' || set == 'Y')
+						msg[0] = 'Y';
+					if (set == 'n' || set == 'N')
+						msg[0] = 'N';
+
+					if (msg[0] == 'Y') {
+						for (temp = mySeat; temp; temp = temp->next) {
+							if (temp->row == msg[5] - '0' && temp->col == msg[7] - '1' + 'a') {
+								break;
+							}
+						}
+						temp->row = msg[2] - '0';
+						temp->col = msg[4] - '1' + 'a';
+					}
+
+					send(hSock, msg, 8, 0);
+
+					strLen = recv(hSock, msg, BUF_SIZE, 0);
+					printSeat(msg, 0);
+
+					break;
+				}
+				else if (msg[0] == 's' || msg[0] == 'S') {
+					msg[0] = 'S';
+
+					count = 1;
+					printf("ÇöÀç º¸À¯ÇÏ°í ÀÖ´Â ÁÂ¼® :\n");
+					for (temp = mySeat; temp; temp = temp->next) {
+						printf("%d) %d,%c\n", count++, temp->row, temp->col);
+					}
+					
+					send(hSock, msg, 1, 0);
+
+					strLen = recv(hSock, msg, BUF_SIZE, 0);
+					printSeat(msg, 0);
+
+					break;
 				}
 				else if (msg[0] == 'q' || msg[0] == 'Q') {
 					msg[0] = 'Q';
@@ -326,7 +346,7 @@ int main(int argc, char *argv[]) {
 					break;
 				}
 
-				printf("ì˜ëª»ëœ ì…ë ¥ì´ì˜¤ë‹ˆ ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš” : ");
+				printf("Àß¸øµÈ ÀÔ·ÂÀÌ¿À´Ï ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä : ");
 				scanf("%c", &buf);
 			}
 		}
@@ -343,31 +363,30 @@ int main(int argc, char *argv[]) {
 void printSeat(char *msg, int start) {
 	int i, j;
 
-	printf(" A B  C D \n");
+	printf("\n A B  C D \n");
 	for (i = 0; i < 8; i++) {
 		printf("%d", i + 1);
 		for (j = 0; j < 2; j++) {
 			if (msg[i * 4 + j + start] == '0')
-				printf("â–¡");
+				printf("¡à");
 			else
-				printf("â– ");
+				printf("¡á");
 		}
 		printf(" ");
 		for (j = 2; j < 4; j++) {
 			if (msg[i * 4 + j + start] == '0')
-				printf("â–¡");
+				printf("¡à");
 			else
-				printf("â– ");
+				printf("¡á");
 		}
 		printf("\n");
 	}
-	printf("\n");
 }
 
 nodePointer makeNewNode(int row, char col) {
 	nodePointer temp;
 
-	temp = (nodePointer)malloc(sizeof(nodePointer));
+	temp = (nodePointer)malloc(sizeof(*temp));
 	temp->row = row;
 	temp->col = col;
 	temp->next = NULL;
