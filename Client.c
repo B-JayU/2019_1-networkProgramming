@@ -34,8 +34,8 @@ int main(int argc, char *argv[]) {
 	strcpy(argv[2], "190528");
 
 	if (argc != 3) {
-	printf("Usage : %s <IP> <port>\n", argv[0]);
-	exit(1);
+		printf("Usage : %s <IP> <port>\n", argv[0]);
+		exit(1);
 	}*/
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 		ErrorHandling("WSAStartup() error!");
@@ -74,15 +74,15 @@ int main(int argc, char *argv[]) {
 					strLen = 1;
 
 					send(hSock, msg, strLen, 0);
-
+					
 					strLen = recv(hSock, msg, BUF_SIZE, 0);
 
-					if (msg[0] != 'R') {
-						fprintf(stderr, "ì˜ˆì™¸ ì²˜ë¦¬ í•„ìš”!");
+					if (msg[0] != 'R'){
+						fprintf(stderr, "¿¹¿Ü Ã³¸® ÇÊ¿ä!");
 						exit(1);
 					}
 
-					printf("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Â¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½( ï¿½ï¿½. 2,a ) : ");
+					printf("¿¹¾àÇÒ ÁÂ¼®À» ¼±ÅÃÇÏ¼¼¿ä( ¿¹. 2,a ) : ");
 
 					scanf("%d%c%c", &row, &buf, &col);
 					scanf("%c", &buf);
@@ -100,7 +100,7 @@ int main(int argc, char *argv[]) {
 						}
 
 						scanf("%c%c", &set, &buf);
-
+						
 						if (set == 'O' || set == 'o') {
 							sprintf(msg, "O%d,%d", row, col - 'a' + 1);
 							strLen = 4;
@@ -123,11 +123,11 @@ int main(int argc, char *argv[]) {
 							send(hSock, msg, strLen, 0);
 						}
 
-						strLen = recv(hSock, msg, BUF_SIZE, 0); \
-							printSeat(msg, 0);
+						strLen = recv(hSock, msg, BUF_SIZE, 0);\
+						printSeat(msg, 0);
 					}
 					else { // msg[0] == 'X'
-						printf("\nï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¸ï¿½ï¿½Ô´Ï´ï¿½.\n");
+						printf("\nÀÌ¹Ì ¿¹¾àµÈ ÀÚ¸®ÀÔ´Ï´Ù.\n");
 
 						printSeat(msg, 1);
 
@@ -152,7 +152,7 @@ int main(int argc, char *argv[]) {
 					break;
 				}
 
-				printf("ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ì¿ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½ : ");
+				printf("Àß¸øµÈ ÀÔ·ÂÀÌ¿À´Ï ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä : ");
 				scanf("%c", &buf);
 			}
 		}
@@ -175,11 +175,11 @@ int main(int argc, char *argv[]) {
 					strLen = recv(hSock, msg, BUF_SIZE, 0);
 
 					if (msg[0] != 'R') {
-						fprintf(stderr, "ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ ï¿½Ê¿ï¿½!");
+						fprintf(stderr, "¿¹¿Ü Ã³¸® ÇÊ¿ä!");
 						exit(1);
 					}
 
-					printf("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Â¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½( ï¿½ï¿½. 2,a ) : ");
+					printf("¿¹¾àÇÒ ÁÂ¼®À» ¼±ÅÃÇÏ¼¼¿ä( ¿¹. 2,a ) : ");
 
 					scanf("%d%c%c", &row, &buf, &col);
 					scanf("%c", &buf);
@@ -224,7 +224,7 @@ int main(int argc, char *argv[]) {
 						printSeat(msg, 0);
 					}
 					else { // msg[0] == 'X'
-						printf("\nï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¸ï¿½ï¿½Ô´Ï´ï¿½.\n");
+						printf("\nÀÌ¹Ì ¿¹¾àµÈ ÀÚ¸®ÀÔ´Ï´Ù.\n");
 
 						printSeat(msg, 1);
 
@@ -243,7 +243,7 @@ int main(int argc, char *argv[]) {
 					strLen = recv(hSock, msg, BUF_SIZE, 0);
 
 					if (msg[0] != 'E') {
-						fprintf(stderr, "ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ ï¿½Ê¿ï¿½!");
+						fprintf(stderr, "¿¹¿Ü Ã³¸® ÇÊ¿ä!");
 						exit(1);
 					}
 
@@ -251,11 +251,11 @@ int main(int argc, char *argv[]) {
 					for (temp = mySeat; temp; temp = temp->next) {
 						printf("%d) %d,%c\n", count++, temp->row, temp->col);
 					}
-					printf("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Â¼ï¿½ ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ ï¿½Â¼ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½ : ");
+					printf("¿¹¾àÇÑ ÁÂ¼® Áß ±³È¯ÇÒ ÁÂ¼®ÀÇ ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä : ");
 					
 					scanf("%d%c", &select, &buf);
 
-					printf("ï¿½ï¿½È¯ï¿½ï¿½ ï¿½Â¼ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½( ï¿½ï¿½. 2,a ) : ");
+					printf("±³È¯ÇÒ ÁÂ¼®À» ÀÔ·ÂÇØÁÖ¼¼¿ä( ¿¹. 2,a ) : ");
 					scanf("%d%c%c", &row, &buf, &col);
 					scanf("%c", &buf);
 
@@ -270,12 +270,12 @@ int main(int argc, char *argv[]) {
 					strLen = recv(hSock, msg, BUF_SIZE, 0);
 
 					if (msg[0] == 'y' || msg[0] == 'Y') {
-						printf("ï¿½ï¿½È¯ ï¿½Ï·ï¿½!\n");
+						printf("±³È¯ ¿Ï·á!\n");
 						temp->row = row;
 						temp->col = col;
 					}
 					else if (msg[0] == 'n' || msg[0] == 'N') {
-						printf("ï¿½ï¿½È¯ï¿½ï¿½ ï¿½ÅºÎµÇ¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.\n");
+						printf("±³È¯ÀÌ °ÅºÎµÇ¾ú½À´Ï´Ù.\n");
 					}
 
 					printSeat(msg, 1);
@@ -285,7 +285,7 @@ int main(int argc, char *argv[]) {
 				else if (msg[0] == 'h' || msg[0] == 'H') {
 					strLen = recv(hSock, msg, BUF_SIZE, 0);
 
-					printf("%c,%cï¿½ï¿½ %c,%cï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã»ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½. ï¿½ï¿½ï¿½ï¿½ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½?(Y/N) : ", msg[4], msg[6] - '1' + 'a', msg[1], msg[3] - '1' + 'a');
+					printf("%c,%c¸¦ %c,%c·Î º¯°æ ¿äÃ»ÀÌ ÀÖ½À´Ï´Ù. ¼ö¶ôÇÏ½Ã°Ú½À´Ï±î?(Y/N) : ", msg[4], msg[6] - '1' + 'a', msg[1], msg[3] - '1' + 'a');
 
 					scanf("%c%c", &set, &buf);
 
@@ -318,7 +318,7 @@ int main(int argc, char *argv[]) {
 					msg[0] = 'S';
 
 					count = 1;
-					printf("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ö´ï¿½ ï¿½Â¼ï¿½ :\n");
+					printf("ÇöÀç º¸À¯ÇÏ°í ÀÖ´Â ÁÂ¼® :\n");
 					for (temp = mySeat; temp; temp = temp->next) {
 						printf("%d) %d,%c\n", count++, temp->row, temp->col);
 					}
@@ -346,7 +346,7 @@ int main(int argc, char *argv[]) {
 					break;
 				}
 
-				printf("ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ì¿ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½ : ");
+				printf("Àß¸øµÈ ÀÔ·ÂÀÌ¿À´Ï ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä : ");
 				scanf("%c", &buf);
 			}
 		}
@@ -368,16 +368,16 @@ void printSeat(char *msg, int start) {
 		printf("%d", i + 1);
 		for (j = 0; j < 2; j++) {
 			if (msg[i * 4 + j + start] == '0')
-				printf("ï¿½ï¿½");
+				printf("¡à");
 			else
-				printf("ï¿½ï¿½");
+				printf("¡á");
 		}
 		printf(" ");
 		for (j = 2; j < 4; j++) {
 			if (msg[i * 4 + j + start] == '0')
-				printf("ï¿½ï¿½");
+				printf("¡à");
 			else
-				printf("ï¿½ï¿½");
+				printf("¡á");
 		}
 		printf("\n");
 	}

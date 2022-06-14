@@ -34,12 +34,12 @@ int main(int argc, char *argv[])
 
 
 	/*   node* temp = malloc(sizeof(node));
-	temp->cID = client ï¿½ï¿½È£;
+	temp->cID = client ¹øÈ£;
 	temp->row = row;
 	temp->column = column;
 
-	if (client[client ï¿½ï¿½È£] == NULL)
-	client[client ï¿½ï¿½È£] = temp;
+	if (client[client ¹øÈ£] == NULL)
+	client[client ¹øÈ£] = temp;
 	*/
 
 	WSADATA wsaData;
@@ -54,8 +54,8 @@ int main(int argc, char *argv[])
 	int strLen, fdNum, i;
 	char buf[A_SIZE];
 	int recent, msg1_len, msg2_len;
-	char message1[] = "ï¿½Â¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ 'R', ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ 'Q' : ";
-	char message2[] = "ï¿½Â¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ 'R', ï¿½ï¿½È¯ï¿½Ï·ï¿½ï¿½ï¿½ 'E', ï¿½ï¿½ ï¿½Â¼ï¿½ ï¿½ï¿½ï¿½ï¿½ : 'S', ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ 'Q' : ";
+	char message1[] = "ÁÂ¼®À» ¿¹¾àÇÏ·Á¸é 'R', Á¾·áÇÏ·Á¸é 'Q' : ";
+	char message2[] = "ÁÂ¼®À» ¿¹¾àÇÏ·Á¸é 'R', ±³È¯ÇÏ·Á¸é 'E', ³» ÁÂ¼® º¸±â : 'S', Á¾·áÇÏ·Á¸é 'Q' : ";
 
 	for (i = 0; i < maxClient; i++) {
 		client[i].seat = NULL;
@@ -82,34 +82,35 @@ int main(int argc, char *argv[])
 	if (listen(hServSock, 5) == SOCKET_ERROR)
 		ErrorHandling("listen() error");
 
-	FD_ZERO(&reads);//select ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½Å©ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
-	//hServSockï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹Ç·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½
-	FD_SET(hServSock, &reads);//hServSockï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+	FD_ZERO(&reads);//select ÇÔ¼öÀÇ °üÂû ´ë»óÀÌ µÇ´Â µð½ºÅ©¸³ÅÍµéÀ» 0À¸·Î ÃÊ±âÈ­
+	//hServSockÀº ¸®½º´× ¼ÒÄÏÀÌ¹Ç·Î ¿¬°á¿äÃ»ÀÌ ¿À´ÂÁö È®ÀÎÇÏ±â À§ÇØ
+	FD_SET(hServSock, &reads);//hServSockÀ» °üÂû´ë»óÀ¸·Î µî·Ï
 
 	while (1)
 	{
-		//select ï¿½Ô¼ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ï¿½ï¿½ ï¿½ß»ï¿½ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½
-		//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		//select ÇÔ¼öÀÇ È£ÃâÀÌ ³¡³ª¸é º¯È­°¡ ¹ß»ýÇÑ µð½ºÅ©¸³ÅÍ¸¦ Á¦¿ÜÇÑ ³ª¸ÓÁö´Â 0À¸·Î
+		//µû¶ó¼­ µð½ºÅ©¸³ÅÍ Á¤º¸µéÀ» º¹»ç
 		cpyReads = reads;
 		timeout.tv_sec = 5;
 		timeout.tv_usec = 5000;
 
-		//selectï¿½Ô¼ï¿½ error Ã³ï¿½ï¿½
-		//ï¿½ï¿½ï¿½ï¿½ï¿½ì¿¡ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+		//selectÇÔ¼ö error Ã³¸®
+		//À©µµ¿ì¿¡¼­´Â °üÂû´ë»óÀÌ 
 		if ((fdNum = select(0, &cpyReads, 0, 0, 0)) == SOCKET_ERROR)
 			break;
-		//readset ï¿½ï¿½ ï¿½î¶² ï¿½ï¿½Å©ï¿½ï¿½ï¿½ï¿½(ï¿½è¿­ ï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¹ï¿½
-		//ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½Ó¾Æ¿ï¿½ ï¿½ç¼³ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½È£ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ continue
+		//readset Áï ¾î¶² µð½ºÅ©¸³ÅÍ(¹è¿­ ³»¿¡)¿¡µµ º¯È­°¡ ¾øÀ½À» ÀÇ¹Ì
+		//µû¶ó¼­ Å¸ÀÓ¾Æ¿ô Àç¼³Á¤ÇÏ°í ÀçÈ£ÃâÇÏ±â À§ÇØ continue
 		if (fdNum == 0)
 			continue;
-		//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â°ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
-		//(ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã» ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+		//ÆÄÀÏ ½ºÅ©¸³ÅÍ ³»¿¡ »óÅÂ°¡ º¯°æµÇ¾úÀ» °æ¿ì
+		//(¿¬°á ¿äÃ» ¶Ç´Â µ¥ÀÌÅÍ ¼ö½Å)
 		for (i = 0; i < reads.fd_count; i++)
 		{
 			if (FD_ISSET(reads.fd_array[i], &cpyReads))
 			{
 				if (reads.fd_array[i] == hServSock)     // connection request!
 				{
+
 					adrSz = sizeof(clntAdr);
 					hClntSock =
 						accept(hServSock, (SOCKADDR*)&clntAdr, &adrSz);
@@ -170,7 +171,7 @@ int main(int argc, char *argv[])
 
 									//client[i].seatCount++;
 									arrLONG[loc] = '1';
-									send(reads.fd_array[i], "OÈ®ï¿½ï¿½? : ", 10, 0);
+									send(reads.fd_array[i], "OÈ®Á¤? : ", 10, 0);
 								}
 								else {
 									char a[34];
@@ -219,6 +220,7 @@ int main(int argc, char *argv[])
 								buf[0] = i + '0';
 								send(which, buf, 7, 0);
 
+
 							}
 
 						}
@@ -226,7 +228,7 @@ int main(int argc, char *argv[])
 
 							r = buf[1] - '1', c = buf[3] - '1';
 							loc = r * col + c;
-						//	printf("bufï¿½ï¿½ Oï¿½ï¿½ ï¿½ï¿½ï¿½ : %d ", loc);
+						//	printf("buf°¡ OÀÏ °æ¿ì : %d ", loc);
 
 							nodePointer temp = (nodePointer)malloc(sizeof(nodePointer));
 							temp->row_s = r;
